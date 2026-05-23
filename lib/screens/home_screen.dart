@@ -145,7 +145,16 @@ class _Header extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: Row(
                   children: [
-                    const CamelIcon(size: 32),
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: const BoxDecoration(
+                        color: AppColors.card,
+                        shape: BoxShape.circle,
+                      ),
+                      padding: const EdgeInsets.all(7),
+                      child: const CamelIcon(size: 26),
+                    ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Column(
@@ -181,14 +190,7 @@ class _Header extends StatelessWidget {
               ),
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: const [
-              _CoinBadge(),
-              SizedBox(height: 6),
-              _AvatarButton(),
-            ],
-          ),
+          const _AvatarWithBadge(),
         ],
       ),
     );
@@ -254,32 +256,48 @@ class _WaiterButton extends StatelessWidget {
   }
 }
 
-class _CoinBadge extends StatelessWidget {
-  const _CoinBadge();
+class _AvatarWithBadge extends StatelessWidget {
+  const _AvatarWithBadge();
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, auth.AuthState>(
-      builder: (context, state) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-          decoration: BoxDecoration(
-            color: AppColors.accent,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.cookie_outlined, color: Colors.white, size: 16),
-              const SizedBox(width: 4),
-              Text(
-                '${state.coins}',
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 13),
+    return SizedBox(
+      width: 48,
+      height: 48,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          const Positioned(right: 0, bottom: 0, child: _AvatarButton()),
+          Positioned(
+            top: -8,
+            right: -7,
+            child: BlocBuilder<AuthBloc, auth.AuthState>(
+              builder: (context, state) => Container(
+                padding: const EdgeInsets.fromLTRB(6, 4, 6, 4),
+                decoration: BoxDecoration(
+                  color: AppColors.accent,
+                  borderRadius: BorderRadius.circular(40),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.cookie, color: Colors.white, size: 12),
+                    const SizedBox(width: 2),
+                    Text(
+                      '${state.coins}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ],
+            ),
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 }
@@ -302,12 +320,11 @@ class _AvatarButton extends StatelessWidget {
             }
           },
           child: Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
+            width: 40,
+            height: 40,
+            decoration: const BoxDecoration(
               color: AppColors.card,
               shape: BoxShape.circle,
-              border: Border.all(color: AppColors.divider),
             ),
             child: const Icon(
               Icons.sentiment_satisfied,
